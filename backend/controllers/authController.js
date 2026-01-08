@@ -82,6 +82,11 @@ export const signup = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        monthlyIncome: user.monthlyIncome,
+        currentBalance: user.currentBalance,
+        monthlyExpenses: user.monthlyExpenses,
+        spendingGoal: user.spendingGoal,
+        plannerCompleted: user.plannerCompleted,
       },
       token,
     });
@@ -159,6 +164,11 @@ export const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        monthlyIncome: user.monthlyIncome,
+        currentBalance: user.currentBalance,
+        monthlyExpenses: user.monthlyExpenses,
+        spendingGoal: user.spendingGoal,
+        plannerCompleted: user.plannerCompleted,
       },
       token,
     });
@@ -191,6 +201,11 @@ export const getMe = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        monthlyIncome: user.monthlyIncome,
+        currentBalance: user.currentBalance,
+        monthlyExpenses: user.monthlyExpenses,
+        spendingGoal: user.spendingGoal,
+        plannerCompleted: user.plannerCompleted,
       },
     });
   } catch (error) {
@@ -221,6 +236,83 @@ export const logout = async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to logout',
+    });
+  }
+};
+
+// @desc    Update user financial details
+// @route   PUT /api/auth/update-profile
+// @access  Private
+export const updateProfile = async (req, res) => {
+  try {
+    const { monthlyIncome, currentBalance, monthlyExpenses, spendingGoal } = req.body;
+
+    // Validate input
+    if (monthlyIncome === undefined || currentBalance === undefined || 
+        monthlyExpenses === undefined || spendingGoal === undefined) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please provide all required fields',
+      });
+    }
+
+    // Validate values are numbers
+    if (isNaN(monthlyIncome) || isNaN(currentBalance) || 
+        isNaN(monthlyExpenses) || isNaN(spendingGoal)) {
+      return res.status(400).json({
+        success: false,
+        error: 'All values must be valid numbers',
+      });
+    }
+
+    // Validate values are positive
+    if (monthlyIncome < 0 || currentBalance < 0 || 
+        monthlyExpenses < 0 || spendingGoal < 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'All values must be positive numbers',
+      });
+    }
+
+    // Update user
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        monthlyIncome: parseFloat(monthlyIncome),
+        currentBalance: parseFloat(currentBalance),
+        monthlyExpenses: parseFloat(monthlyExpenses),
+        spendingGoal: parseFloat(spendingGoal),
+        plannerCompleted: true,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Financial details updated successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        monthlyIncome: user.monthlyIncome,
+        currentBalance: user.currentBalance,
+        monthlyExpenses: user.monthlyExpenses,
+        spendingGoal: user.spendingGoal,
+        plannerCompleted: user.plannerCompleted,
+      },
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update financial details',
     });
   }
 };

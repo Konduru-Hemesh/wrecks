@@ -25,6 +25,27 @@ const UserSchema = new mongoose.Schema(
       minlength: 8,
       select: false, // Don't return password by default
     },
+    // Financial details
+    monthlyIncome: {
+      type: Number,
+      default: null,
+    },
+    currentBalance: {
+      type: Number,
+      default: null,
+    },
+    monthlyExpenses: {
+      type: Number,
+      default: null,
+    },
+    spendingGoal: {
+      type: Number,
+      default: null,
+    },
+    plannerCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

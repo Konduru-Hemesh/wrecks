@@ -22,19 +22,30 @@ export default function PlannerPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication and load existing data
     const checkAuth = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/auth/me`, {
           credentials: 'include',
         });
         if (response.ok) {
+          const data = await response.json();
           setIsAuthenticated(true);
+          
           // Check if planner is already completed
-          const plannerData = localStorage.getItem('plannerCompleted');
-          if (plannerData === 'true') {
+          if (data.user?.plannerCompleted) {
             router.push('/dashboard');
             return;
+          }
+          
+          // Load existing data if available
+          if (data.user?.monthlyIncome) {
+            setFormData({
+              monthlyIncome: data.user.monthlyIncome.toString(),
+              currentBalance: data.user.currentBalance?.toString() || '',
+              monthlyExpenses: data.user.monthlyExpenses?.toString() || '',
+              spendingGoal: data.user.spendingGoal?.toString() || '',
+            });
           }
         } else {
           router.push('/login');
@@ -81,26 +92,33 @@ export default function PlannerPage() {
         return;
       }
 
-      // Store planner data in localStorage
-      const plannerData = {
-        monthlyIncome: monthlyIncome,
-        currentBalance: currentBalance,
-        monthlyExpenses: monthlyExpenses,
-        spendingGoal: spendingGoal,
-      };
-      
-      localStorage.setItem('plannerData', JSON.stringify(plannerData));
-      localStorage.setItem('plannerCompleted', 'true');
+      // Save planner data to backend
+      const updateResponse = await fetch(`${API_BASE_URL}/auth/update-profile`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          monthlyIncome,
+          currentBalance,
+          monthlyExpenses,
+          spendingGoal,
+        }),
+      });
 
-      // Log for debugging
-      console.log('Planner data saved:', plannerData);
+      const updateData = await updateResponse.json();
+
+      if (!updateResponse.ok) {
+        toast.error(updateData.error || 'Failed to save financial details');
+        setLoading(false);
+        return;
+      }
 
       toast.success('Planner setup completed!');
       
-      // Small delay to ensure localStorage is saved
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 100);
+      // Redirect to dashboard
+      router.push('/dashboard');
     } catch (error) {
       console.error('Planner error:', error);
       toast.error('An error occurred. Please try again.');

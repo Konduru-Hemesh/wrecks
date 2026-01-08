@@ -4,6 +4,7 @@ import {
   login,
   getMe,
   logout,
+  updateProfile,
   deleteAccount,
 } from '../controllers/authController.js';
 import { authenticate } from '../middleware/auth.js';
@@ -16,6 +17,7 @@ router.post('/login', login);
 
 // Protected routes
 router.get('/me', authenticate, getMe);
+router.put('/update-profile', authenticate, updateProfile);
 router.post('/logout', authenticate, logout);
 router.delete('/delete-account', authenticate, deleteAccount);
 

@@ -20,14 +20,15 @@ export default function DashboardLayout({ children }) {
           credentials: 'include',
         });
         if (response.ok) {
+          const data = await response.json();
           const urlParams = new URLSearchParams(window.location.search);
           if (urlParams.get('google_auth') === 'true') {
             window.history.replaceState({}, '', window.location.pathname);
             toast.success('Logged in with Google!');
           }
 
-          const plannerCompleted = localStorage.getItem('plannerCompleted');
-          if (plannerCompleted !== 'true') {
+          // Check if planner is completed from backend
+          if (!data.user?.plannerCompleted) {
             router.push('/planner');
             return;
           }

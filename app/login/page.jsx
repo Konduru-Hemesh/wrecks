@@ -41,13 +41,12 @@ export default function LoginPage() {
 
       toast.success(data.message || 'Login successful!');
       
-      // Check if user is new (no planner data) or existing
-      const plannerCompleted = localStorage.getItem('plannerCompleted');
-      if (plannerCompleted === 'true') {
-        // Existing user - go to dashboard
+      // Check if user has completed planner by checking user data
+      if (data.user?.plannerCompleted) {
+        // Existing user with completed planner - go to dashboard
         router.push('/dashboard');
       } else {
-        // New user - go to planner
+        // New user or incomplete planner - go to planner
         router.push('/planner');
       }
     } catch (error) {
@@ -196,7 +195,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full h-12 text-base bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Logging in..." : "Log In"}
             </Button>
           </form>
 
