@@ -1,6 +1,6 @@
-# Deployment Guide for FlowCast
+# Deployment Guide for SpendAhead
 
-This guide will help you deploy FlowCast to production with MongoDB Atlas (cloud database) so it works after hosting.
+This guide will help you deploy SpendAhead to production with MongoDB Atlas (cloud database) so it works after hosting.
 
 ## Table of Contents
 1. [MongoDB Atlas Setup](#mongodb-atlas-setup)
@@ -49,11 +49,11 @@ This guide will help you deploy FlowCast to production with MongoDB Atlas (cloud
 4. Select "Node.js" and version "5.5 or later"
 5. Copy the connection string (looks like: `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`)
 6. Replace `<password>` with your database user password
-7. Replace `<dbname>` with your database name (e.g., `flowcast`)
+7. Replace `<dbname>` with your database name (e.g., `spendahead`)
 
 **Example Connection String:**
 ```
-mongodb+srv://myuser:mypassword@cluster0.abc123.mongodb.net/flowcast?retryWrites=true&w=majority
+mongodb+srv://myuser:mypassword@cluster0.abc123.mongodb.net/spendahead?retryWrites=true&w=majority
 ```
 
 ---
@@ -70,7 +70,7 @@ PORT=5000
 NODE_ENV=production
 
 # MongoDB Atlas Connection (Replace with your connection string)
-MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/flowcast?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/spendahead?retryWrites=true&w=majority
 
 # JWT Secret (Generate a strong random string)
 JWT_SECRET=your-super-secret-jwt-key-change-this-to-random-string
@@ -163,7 +163,7 @@ And update your backend CORS settings in `backend/server.js` to allow your Verce
 3. Click "New" → "Web Service"
 4. Connect your repository
 5. Configure:
-   - **Name**: flowcast-backend
+   - **Name**: spendahead-backend
    - **Environment**: Node
    - **Build Command**: `npm install`
    - **Start Command**: `npm start`
@@ -270,7 +270,7 @@ app.use(cors(corsOptions));
 ### Local Development URLs:
 - Frontend: `http://localhost:3000`
 - Backend: `http://localhost:5000`
-- MongoDB: `mongodb://localhost:27017/flowcast` (local) or MongoDB Atlas (cloud)
+- MongoDB: `mongodb://localhost:27017/spendahead` (local) or MongoDB Atlas (cloud)
 
 ### Production URLs:
 - Frontend: `https://your-app.vercel.app`

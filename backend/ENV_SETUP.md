@@ -8,9 +8,9 @@ PORT=5000
 NODE_ENV=development
 
 # MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/flowcast
+MONGODB_URI=mongodb://localhost:27017/spendahead
 # For MongoDB Atlas, use:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/flowcast?retryWrites=true&w=majority
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendahead?retryWrites=true&w=majority
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production

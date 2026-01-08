@@ -1,6 +1,6 @@
-# FlowCast Backend API
+# SpendAhead Backend API
 
-Backend server for FlowCast financial management application built with Express.js and MongoDB.
+Backend server for SpendAhead financial management application built with Express.js and MongoDB.
 
 ## Features
 
@@ -30,9 +30,9 @@ PORT=5000
 NODE_ENV=development
 
 # MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/flowcast
+MONGODB_URI=mongodb://localhost:27017/spendahead
 # For MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/flowcast?retryWrites=true&w=majority
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendahead?retryWrites=true&w=majority
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
@@ -77,7 +77,7 @@ The server will run on `http://localhost:5000`
 
 1. Install MongoDB locally
 2. Start MongoDB service
-3. Use connection string: `mongodb://localhost:27017/flowcast`
+3. Use connection string: `mongodb://localhost:27017/spendahead`
 
 ### Option 2: MongoDB Atlas (Cloud)
 

@@ -197,7 +197,7 @@ export default function DashboardPage() {
               <div className="w-8 h-8 bg-gradient-to-br from-teal-500 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">₹</span>
               </div>
-              <span className="text-xl font-bold gradient-title">FlowCast</span>
+              <span className="text-xl font-bold gradient-title">SpendAhead</span>
             </Link>
             
             <Button

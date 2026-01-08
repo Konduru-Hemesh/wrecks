@@ -1,7 +1,7 @@
 {
-  "name": "flowcast-backend",
+  "name": "spendahead-backend",
   "version": "1.0.0",
-  "description": "Backend API for FlowCast financial management application",
+  "description": "Backend API for SpendAhead financial management application",
   "main": "server.js",
   "type": "module",
   "scripts": {

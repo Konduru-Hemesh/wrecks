@@ -19,7 +19,7 @@ npm install
 ```env
 PORT=5000
 NODE_ENV=development
-MONGODB_URI=mongodb://localhost:27017/flowcast
+MONGODB_URI=mongodb://localhost:27017/spendahead
 JWT_SECRET=your-super-secret-jwt-key-change-this
 JWT_EXPIRE=7d
 FRONTEND_URL=http://localhost:3000
@@ -28,7 +28,7 @@ FRONTEND_URL=http://localhost:3000
 **For MongoDB Atlas (Cloud):**
 Replace `MONGODB_URI` with:
 ```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/flowcast?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendahead?retryWrites=true&w=majority
 ```
 
 ### Step 3: Start Backend Server
@@ -63,7 +63,7 @@ npm run dev
 ### Option A: Local MongoDB
 1. Install MongoDB from [mongodb.com](https://www.mongodb.com/try/download/community)
 2. Start MongoDB service
-3. Use: `MONGODB_URI=mongodb://localhost:27017/flowcast`
+3. Use: `MONGODB_URI=mongodb://localhost:27017/spendahead`
 
 ### Option B: MongoDB Atlas (Free Cloud)
 1. Sign up at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)

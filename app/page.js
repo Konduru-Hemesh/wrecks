@@ -163,7 +163,7 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-              How <span className="gradient-title">FlowCast</span> Works
+              How <span className="gradient-title">SpendAhead</span> Works
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Three simple steps to understand your financial future
@@ -176,7 +176,7 @@ export default function HomePage() {
                 step: "01",
                 title: "Track Your Spending",
                 description:
-                  "Manually add expenses or scan receipts with AI. FlowCast learns your spending patterns automatically.",
+                  "Manually add expenses or scan receipts with AI. SpendAhead learns your spending patterns automatically.",
                 icon: DollarSign,
                 gradient: "from-teal-500 to-blue-500",
               },
@@ -233,10 +233,10 @@ export default function HomePage() {
               <div className="w-8 h-8 bg-gradient-to-br from-teal-500 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">₹</span>
               </div>
-              <span className="text-xl font-bold gradient-title">FlowCast</span>
+              <span className="text-xl font-bold gradient-title">SpendAhead</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 FlowCast. Powered by AI. Built for your future.
+              © 2024 SpendAhead. Powered by AI. Built for your future.
             </p>
           </div>
         </div>

@@ -15,10 +15,10 @@ NODE_ENV=development
 
 # MongoDB Configuration
 # For local MongoDB (default):
-MONGODB_URI=mongodb://localhost:27017/flowcast
+MONGODB_URI=mongodb://localhost:27017/spendahead
 
 # For MongoDB Atlas (cloud), uncomment and update:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/flowcast?retryWrites=true&w=majority
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendahead?retryWrites=true&w=majority
 
 # JWT Configuration
 # This is a secure random key - keep it secret!
@@ -60,7 +60,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ### Option 1: Local MongoDB
 If you have MongoDB installed locally, use:
 ```
-MONGODB_URI=mongodb://localhost:27017/flowcast
+MONGODB_URI=mongodb://localhost:27017/spendahead
 ```
 
 ### Option 2: MongoDB Atlas (Cloud)
@@ -71,7 +71,7 @@ MONGODB_URI=mongodb://localhost:27017/flowcast
 
 Example:
 ```
-MONGODB_URI=mongodb+srv://myusername:mypassword@cluster0.xxxxx.mongodb.net/flowcast?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://myusername:mypassword@cluster0.xxxxx.mongodb.net/spendahead?retryWrites=true&w=majority
 ```
 
 ## After creating .env:

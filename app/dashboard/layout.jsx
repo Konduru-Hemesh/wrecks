@@ -76,10 +76,10 @@ export default function DashboardLayout({ children }) {
                 <div className="w-8 h-8 bg-gradient-to-br from-teal-500 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg">₹</span>
                 </div>
-                <span className="text-xl font-bold gradient-title">FlowCast</span>
+                <span className="text-xl font-bold gradient-title">SpendAhead</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                © 2024 FlowCast. Future-first financial intelligence. Built for your peace of mind.
+                © 2024 SpendAhead. Future-first financial intelligence. Built for your peace of mind.
               </p>
             </div>
           </div>

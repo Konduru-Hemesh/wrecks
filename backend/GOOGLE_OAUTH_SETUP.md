@@ -10,13 +10,13 @@
 4. Click **Create Credentials** → **OAuth client ID**
 5. Configure the OAuth consent screen first (if not done):
    - User Type: External
-   - App name: FlowCast
+   - App name: SpendAhead
    - User support email: your email
    - Developer contact: your email
    - Add scopes: `email`, `profile`, `openid`
 6. Create OAuth client ID:
    - Application type: **Web application**
-   - Name: FlowCast Web Client
+   - Name: SpendAhead Web Client
    - Authorized JavaScript origins:
      - `http://localhost:3000` (for development)
      - `http://localhost:5000` (for backend)

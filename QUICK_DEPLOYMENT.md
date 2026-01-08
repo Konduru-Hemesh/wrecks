@@ -1,6 +1,6 @@
 # Quick Deployment Checklist
 
-Follow these steps to deploy your FlowCast application:
+Follow these steps to deploy your SpendAhead application:
 
 ## ✅ Pre-Deployment Checklist
 
@@ -24,11 +24,11 @@ Follow these steps to deploy your FlowCast application:
 2. Choose "Connect your application"
 3. Copy the connection string
 4. Replace `<password>` with your database password
-5. Replace `<dbname>` with `flowcast`
+5. Replace `<dbname>` with `spendahead`
 
 **Example:**
 ```
-mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/flowcast?retryWrites=true&w=majority
+mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/spendahead?retryWrites=true&w=majority
 ```
 
 **Step 3: Configure Network Access**
@@ -42,7 +42,7 @@ mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/flowcast?retryWrites=
 ```env
 PORT=5000
 NODE_ENV=production
-MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/flowcast?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/spendahead?retryWrites=true&w=majority
 JWT_SECRET=your-strong-random-secret-here
 JWT_EXPIRE=7d
 FRONTEND_URL=https://your-frontend.vercel.app

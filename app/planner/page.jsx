@@ -168,7 +168,7 @@ export default function PlannerPage() {
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-            Welcome to <span className="gradient-title">FlowCast</span>
+            Welcome to <span className="gradient-title">SpendAhead</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Tell us about your finances so we can help you predict and plan your spending

@@ -23,10 +23,10 @@ NODE_ENV=development
 
 # MongoDB Configuration
 # For local MongoDB:
-MONGODB_URI=mongodb://localhost:27017/flowcast
+MONGODB_URI=mongodb://localhost:27017/spendahead
 
 # For MongoDB Atlas (cloud):
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/flowcast?retryWrites=true&w=majority
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendahead?retryWrites=true&w=majority
 
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
@@ -65,7 +65,7 @@ The backend will run on `http://localhost:5000`
 
 3. **Use connection string:**
    ```
-   MONGODB_URI=mongodb://localhost:27017/flowcast
+   MONGODB_URI=mongodb://localhost:27017/spendahead
    ```
 
 ### Option 2: MongoDB Atlas (Cloud - Recommended)
@@ -98,11 +98,11 @@ The backend will run on `http://localhost:5000`
    - Choose "Connect your application"
    - Copy the connection string
    - Replace `<password>` with your database user password
-   - Replace `<dbname>` with `flowcast`
+   - Replace `<dbname>` with `spendahead`
 
 6. **Update .env file:**
    ```
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/flowcast?retryWrites=true&w=majority
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spendahead?retryWrites=true&w=majority
    ```
 
 ## Generate JWT Secret

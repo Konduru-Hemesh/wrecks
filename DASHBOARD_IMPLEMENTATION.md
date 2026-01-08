@@ -266,7 +266,7 @@ Before the return statement, add warning level calculation and update the loadin
 ```
 
 ## 10. Update UI Elements
-- Replace "FlowCast" with "ExpenseTracker"
+- Replace "FlowCast" with "SpendAhead"
 - Replace all instances of `{user?.name || 'User'}` for the user name display
 - Update metric cards to use `totalExpenses` and `remainingBudget`
 - Add warning colors to the first metric card: `className={...border-2 ${warningColors[warningLevel]}}`
