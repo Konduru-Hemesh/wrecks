@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { useFinancial } from '@/lib/financialContext';
+import { useTransactions } from '@/lib/useTransactions';
 import {
   PieChart,
   Pie,
@@ -31,27 +32,30 @@ const COLORS = {
   entertainment: '#ec4899',
   food: '#f97316',
   shopping: '#6366f1',
+  healthcare: '#ef4444',
+  education: '#fbbf24',
+  personal: '#6b7280',
+  travel: '#14b8a6',
+  gifts: '#f43f5e',
+  'other-expense': '#6b7280',
   other: '#6b7280',
 };
 
 export default function EnhancedAnalytics() {
   const { financialState, projections, whatIfScenario } = useFinancial();
+  const { transactions, categoryTotals, totalSpending, getCurrentMonthTransactions } = useTransactions();
 
-  // Prepare expense category data
-  const categoryData = [
-    ...financialState.fixedExpenses.map(exp => ({
-      name: exp.name,
-      value: exp.amount,
-      category: exp.category,
-      type: 'Fixed',
-    })),
-    ...financialState.variableExpenses.map(exp => ({
-      name: exp.name,
-      value: exp.amount,
-      category: exp.category,
-      type: 'Variable',
-    })),
-  ];
+  // Use real transaction data instead of mock data
+  const currentMonthTransactions = getCurrentMonthTransactions();
+  const actualTotalSpending = currentMonthTransactions.reduce((sum, t) => sum + t.amount, 0);
+
+  // Prepare expense category data from real transactions
+  const categoryData = Object.entries(categoryTotals).map(([category, amount]) => ({
+    name: category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' '),
+    value: amount,
+    category: category,
+    type: 'Transaction',
+  }));
 
   // Add What-If expense if exists
   if (whatIfScenario && whatIfScenario.amount && whatIfScenario.category) {
@@ -63,18 +67,20 @@ export default function EnhancedAnalytics() {
     });
   }
 
-  const categoryTotals = categoryData.reduce((acc, item) => {
-    acc[item.category] = (acc[item.category] || 0) + item.value;
-    return acc;
-  }, {});
+  // Merge category totals with what-if if exists
+  const mergedCategoryTotals = { ...categoryTotals };
+  if (whatIfScenario && whatIfScenario.amount && whatIfScenario.category) {
+    mergedCategoryTotals[whatIfScenario.category] = 
+      (mergedCategoryTotals[whatIfScenario.category] || 0) + whatIfScenario.amount;
+  }
 
-  const pieChartData = Object.entries(categoryTotals).map(([category, value]) => ({
+  const pieChartData = Object.entries(mergedCategoryTotals).map(([category, value]) => ({
     name: category.charAt(0).toUpperCase() + category.slice(1),
     value: Math.round(value),
     fill: COLORS[category] || '#6b7280',
   }));
 
-  // Income vs Expenses comparison
+  // Income vs Expenses comparison (using actual spending)
   const incomeVsExpenses = [
     {
       name: 'Income',
@@ -83,12 +89,12 @@ export default function EnhancedAnalytics() {
     },
     {
       name: 'Expenses',
-      amount: financialState.monthlyExpenses,
+      amount: actualTotalSpending || 0,
       type: 'expense',
     },
     {
       name: 'Savings',
-      amount: financialState.monthlyIncome - financialState.monthlyExpenses,
+      amount: financialState.monthlyIncome - (actualTotalSpending || 0),
       type: 'savings',
     },
   ];
@@ -101,9 +107,15 @@ export default function EnhancedAnalytics() {
     expenses: Math.round(proj.fixedExpenses + proj.variableExpenses),
   }));
 
-  // Fixed vs Variable expenses
-  const fixedTotal = financialState.fixedExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-  const variableTotal = financialState.variableExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+  // Fixed vs Variable expenses (using actual transactions)
+  // Categorize transactions as fixed or variable based on category
+  const fixedCategories = ['housing', 'utilities', 'insurance', 'bills'];
+  const fixedTotal = currentMonthTransactions
+    .filter(t => fixedCategories.includes(t.category))
+    .reduce((sum, t) => sum + t.amount, 0);
+  const variableTotal = currentMonthTransactions
+    .filter(t => !fixedCategories.includes(t.category))
+    .reduce((sum, t) => sum + t.amount, 0);
   const expenseTypeData = [
     { name: 'Fixed Expenses', value: Math.round(fixedTotal), color: '#3b82f6' },
     { name: 'Variable Expenses', value: Math.round(variableTotal), color: '#10b981' },
@@ -111,8 +123,8 @@ export default function EnhancedAnalytics() {
 
   // Top expenses (including what-if if exists)
   const totalExpensesForPercentage = whatIfScenario && whatIfScenario.amount 
-    ? financialState.monthlyExpenses + whatIfScenario.amount 
-    : financialState.monthlyExpenses;
+    ? (actualTotalSpending || 0) + whatIfScenario.amount 
+    : (actualTotalSpending || 0);
   
   const topExpenses = [...categoryData]
     .sort((a, b) => b.value - a.value)
@@ -120,11 +132,13 @@ export default function EnhancedAnalytics() {
     .map(item => ({
       name: item.name,
       amount: Math.round(item.value),
-      percentage: ((item.value / totalExpensesForPercentage) * 100).toFixed(1),
+      percentage: totalExpensesForPercentage > 0 ? ((item.value / totalExpensesForPercentage) * 100).toFixed(1) : '0',
       type: item.type,
     }));
 
-  const savingsRate = ((financialState.monthlyIncome - financialState.monthlyExpenses) / financialState.monthlyIncome * 100).toFixed(1);
+  const savingsRate = financialState.monthlyIncome > 0 
+    ? ((financialState.monthlyIncome - (actualTotalSpending || 0)) / financialState.monthlyIncome * 100).toFixed(1)
+    : '0';
 
   return (
     <div className="space-y-6">
@@ -147,7 +161,7 @@ export default function EnhancedAnalytics() {
             <div>
               <p className="text-sm text-muted-foreground">Monthly Expenses</p>
               <p className="text-2xl font-bold text-red-600">
-                ₹{financialState.monthlyExpenses.toLocaleString()}
+                ₹{(actualTotalSpending || 0).toLocaleString()}
               </p>
             </div>
             <ShoppingBag className="w-8 h-8 text-red-500" />
@@ -159,14 +173,14 @@ export default function EnhancedAnalytics() {
             <div>
               <p className="text-sm text-muted-foreground">Net Savings</p>
               <p className={`text-2xl font-bold ${
-                financialState.monthlyIncome - financialState.monthlyExpenses >= 0 
+                financialState.monthlyIncome - (actualTotalSpending || 0) >= 0 
                   ? 'text-green-600' 
                   : 'text-red-600'
               }`}>
-                ₹{Math.abs(financialState.monthlyIncome - financialState.monthlyExpenses).toLocaleString()}
+                ₹{Math.abs(financialState.monthlyIncome - (actualTotalSpending || 0)).toLocaleString()}
               </p>
             </div>
-            {financialState.monthlyIncome - financialState.monthlyExpenses >= 0 ? (
+            {financialState.monthlyIncome - (actualTotalSpending || 0) >= 0 ? (
               <TrendingUp className="w-8 h-8 text-green-500" />
             ) : (
               <TrendingDown className="w-8 h-8 text-red-500" />

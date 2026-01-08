@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getExpenses,
   createExpense,
+  updateExpense,
   deleteExpense,
 } from '../controllers/expenseController.js';
 import { authenticate } from '../middleware/auth.js';
@@ -16,6 +17,7 @@ router.route('/')
   .post(createExpense);
 
 router.route('/:id')
+  .put(updateExpense)
   .delete(deleteExpense);
 
 export default router;

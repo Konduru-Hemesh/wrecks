@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, LayoutDashboard, Sparkles, TrendingUp, Target, BarChart3, Menu, X, Settings } from 'lucide-react';
+import { LogOut, LayoutDashboard, Sparkles, TrendingUp, Target, BarChart3, Menu, X, Settings, Receipt } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { toast } from 'sonner';
@@ -28,6 +28,7 @@ export default function DashboardNavbar() {
 
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/dashboard/transactions', label: 'Transactions', icon: Receipt },
     { href: '/dashboard/what-if', label: 'What-If', icon: Sparkles },
     { href: '/dashboard/recommendations', label: 'Recommendations', icon: TrendingUp },
     { href: '/dashboard/goals', label: 'Goals', icon: Target },
