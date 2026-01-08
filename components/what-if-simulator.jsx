@@ -31,24 +31,43 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+const EXPENSE_CATEGORIES = [
+  { value: 'groceries', label: 'Groceries' },
+  { value: 'shopping', label: 'Shopping' },
+  { value: 'entertainment', label: 'Entertainment' },
+  { value: 'food', label: 'Dining/Food' },
+  { value: 'transportation', label: 'Transportation' },
+  { value: 'housing', label: 'Housing' },
+  { value: 'utilities', label: 'Utilities' },
+  { value: 'insurance', label: 'Insurance' },
+  { value: 'bills', label: 'Bills' },
+  { value: 'other', label: 'Other' },
+];
+
 export default function WhatIfSimulator() {
   const { simulateWhatIf, clearWhatIf, whatIfScenario, financialState } = useFinancial();
   
   const [amount, setAmount] = useState('');
   const [day, setDay] = useState(0);
   const [duration, setDuration] = useState(30);
+  const [category, setCategory] = useState('');
   const [impact, setImpact] = useState(null);
   const [isSimulating, setIsSimulating] = useState(false);
 
   const handleSimulate = () => {
     const parsedAmount = parseFloat(amount);
     if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) return;
+    if (!category) {
+      alert('Please select an expense category');
+      return;
+    }
 
     setIsSimulating(true);
     const result = simulateWhatIf({
       amount: parsedAmount,
       day: parseInt(day),
       duration: parseInt(duration),
+      category: category,
     });
     setImpact(result.impact);
     
@@ -63,6 +82,7 @@ export default function WhatIfSimulator() {
     setAmount('');
     setDay(0);
     setDuration(30);
+    setCategory('');
     setImpact(null);
   };
 
@@ -106,7 +126,7 @@ export default function WhatIfSimulator() {
         <Card className="p-6 glassmorphism border-2 border-purple-500/30">
           <div className="space-y-6">
             {/* Input Section */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Amount Input */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">
@@ -124,6 +144,23 @@ export default function WhatIfSimulator() {
                     className="pl-7"
                   />
                 </div>
+              </div>
+
+              {/* Expense Category */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">What type of expense?</label>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {EXPENSE_CATEGORIES.map((cat) => (
+                      <SelectItem key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Day Selection */}
@@ -181,7 +218,7 @@ export default function WhatIfSimulator() {
             <div className="flex items-center gap-3">
               <Button
                 onClick={handleSimulate}
-                disabled={!amount || parseFloat(amount) <= 0}
+                disabled={!amount || parseFloat(amount) <= 0 || !category}
                 className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white button-glow"
                 size="lg"
               >

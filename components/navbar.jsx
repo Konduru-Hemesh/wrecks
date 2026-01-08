@@ -62,12 +62,6 @@ export default function Navbar() {
             >
               How It Works
             </Link>
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-            >
-              Dashboard
-            </Link>
           </div>
 
           {/* Right Side Actions */}
@@ -129,13 +123,6 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               How It Works
-            </Link>
-            <Link
-              href="/dashboard"
-              className="block px-3 py-2 rounded-lg text-base font-medium hover:bg-accent transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Dashboard
             </Link>
             <div className="pt-3 border-t border-border flex items-center justify-between">
               <span className="text-sm font-medium">Theme</span>
