@@ -7,8 +7,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Shield, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
+import { TrendingUp, TrendingDown, Shield, AlertTriangle, AlertCircle, CheckCircle, Info } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { useFinancial } from '@/lib/financialContext';
 
 export default function FinancialHealthSnapshot() {
@@ -205,11 +207,51 @@ export default function FinancialHealthSnapshot() {
           <Card className="p-6 glassmorphism">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold">Risk Score</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Comprehensive health assessment
-                  </p>
+                <div className="flex items-start gap-2">
+                  <div>
+                    <h3 className="text-lg font-semibold">Risk Score</h3>
+                    <p className="text-sm text-muted-foreground">
+                      0–100 financial health score (higher is better)
+                    </p>
+                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 rounded-full text-muted-foreground hover:text-foreground"
+                        aria-label="How is my risk score calculated?"
+                      >
+                        <Info className="w-4 h-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="text-sm space-y-2">
+                      <div>
+                        <p className="font-medium mb-1">How your risk score works</p>
+                        <p className="text-xs text-muted-foreground">
+                          This is a 0–100 financial health score. A higher score means your finances are safer and more stable.
+                        </p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-medium text-xs uppercase text-muted-foreground">Score breakdown</p>
+                        <ul className="list-disc list-inside space-y-1">
+                          <li>Balance adequacy (up to 40 points) – how your current balance compares to your emergency buffer.</li>
+                          <li>Income stability (up to 30 points) – how comfortably income covers monthly expenses.</li>
+                          <li>Expense predictability (up to 20 points) – how stable vs. volatile your spending is.</li>
+                          <li>Safety margin (up to 10 points) – how much you typically save each month.</li>
+                        </ul>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-medium text-xs uppercase text-muted-foreground">Financial stress levels</p>
+                        <ul className="list-disc list-inside space-y-1">
+                          <li>80–100: Low stress – finances are strong and resilient.</li>
+                          <li>60–79: Moderate stress – mostly stable with some areas to watch.</li>
+                          <li>40–59: Elevated stress – finances need attention and tightening.</li>
+                          <li>0–39: High stress – finances are under pressure and vulnerable.</li>
+                        </ul>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div className="text-right">
                   <p className="text-4xl font-bold gradient-title">
