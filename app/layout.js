@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
-  title: "FlowCast - Predict Your Cash Flow",
+  title: "SpendAhead - Predict Your Cash Flow",
   description: "See how today's spending shapes your entire month. Intelligent cash flow prediction for better financial decisions.",
 };
 
