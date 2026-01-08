@@ -19,6 +19,7 @@ import WhatIfSimulator from '@/components/what-if-simulator';
 import SmartRecommendations from '@/components/smart-recommendations';
 import AIFinancialCopilot from '@/components/ai-financial-copilot';
 import GoalsPlanning from '@/components/goals-planning';
+import DashboardAnalytics from '@/components/dashboard-analytics';
 
 function DashboardContent() {
   const router = useRouter();
@@ -68,6 +69,11 @@ function DashboardContent() {
             See how today&apos;s spending shapes your entire month. Simulate decisions, get smart recommendations, and plan for your future — all in one place.
           </p>
         </motion.div>
+
+        {/* Analytics + What-If */}
+        <section>
+          <DashboardAnalytics />
+        </section>
 
         {/* Financial Health Snapshot */}
         <section>
