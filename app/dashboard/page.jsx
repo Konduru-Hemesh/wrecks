@@ -8,6 +8,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import FinancialHealthSnapshot from '@/components/financial-health-snapshot';
 import CashFlowTimeline from '@/components/cash-flow-timeline';
+import AppliedRecommendations from '@/components/applied-recommendations';
 
 export default function DashboardPage() {
   return (
@@ -34,6 +35,11 @@ export default function DashboardPage() {
       {/* Cash Flow Timeline */}
       <section>
         <CashFlowTimeline />
+      </section>
+
+      {/* Applied Recommendations */}
+      <section>
+        <AppliedRecommendations />
       </section>
     </div>
   );

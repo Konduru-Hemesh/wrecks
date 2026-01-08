@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useFinancial } from '@/lib/financialContext';
+import { toast } from 'sonner';
 import {
   Calculator,
   TrendingUp,
@@ -22,6 +23,7 @@ import {
   Sparkles,
   X,
   RotateCcw,
+  CheckCircle,
 } from 'lucide-react';
 import {
   Select,
@@ -45,20 +47,28 @@ const EXPENSE_CATEGORIES = [
 ];
 
 export default function WhatIfSimulator() {
-  const { simulateWhatIf, clearWhatIf, whatIfScenario, financialState } = useFinancial();
+  const { simulateWhatIf, clearWhatIf, whatIfScenario, financialState, addExpenseFromSimulation } = useFinancial();
   
   const [amount, setAmount] = useState('');
   const [day, setDay] = useState(0);
-  const [duration, setDuration] = useState(30);
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
   const [impact, setImpact] = useState(null);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleSimulate = () => {
     const parsedAmount = parseFloat(amount);
-    if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) return;
+    if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+      toast.error('Please enter a valid amount');
+      return;
+    }
     if (!category) {
-      alert('Please select an expense category');
+      toast.error('Please select an expense category');
+      return;
+    }
+    if (!description || description.trim() === '') {
+      toast.error('Please enter a description');
       return;
     }
 
@@ -66,7 +76,7 @@ export default function WhatIfSimulator() {
     const result = simulateWhatIf({
       amount: parsedAmount,
       day: parseInt(day),
-      duration: parseInt(duration),
+      duration: 30, // Fixed to 30 days
       category: category,
     });
     setImpact(result.impact);
@@ -81,9 +91,40 @@ export default function WhatIfSimulator() {
     clearWhatIf();
     setAmount('');
     setDay(0);
-    setDuration(30);
     setCategory('');
+    setDescription('');
     setImpact(null);
+  };
+
+  const handleSaveTransaction = async () => {
+    if (!amount || !category || !description || description.trim() === '') {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const expenseDate = new Date();
+      expenseDate.setDate(expenseDate.getDate() + parseInt(day));
+      const formattedDate = expenseDate.toISOString().split('T')[0];
+      const displayDate = expenseDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      
+      await addExpenseFromSimulation({
+        amount: parseFloat(amount),
+        category: category,
+        description: description,
+        date: formattedDate,
+      });
+
+      // Clear the simulation
+      handleClear();
+      toast.success(`Transaction saved successfully for ${displayDate}!`);
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+      toast.error(error.message || 'Failed to save transaction. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const getImpactColor = (value) => {
@@ -171,46 +212,26 @@ export default function WhatIfSimulator() {
                     <SelectValue placeholder="Select day" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="0">Today</SelectItem>
-                    <SelectItem value="3">In 3 days</SelectItem>
-                    <SelectItem value="7">In 1 week</SelectItem>
-                    <SelectItem value="14">In 2 weeks</SelectItem>
-                    <SelectItem value="21">In 3 weeks</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Duration Selection */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Simulate for how long?</label>
-                <Select value={duration.toString()} onValueChange={(val) => setDuration(parseInt(val))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select duration" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="30">30 Days</SelectItem>
-                    <SelectItem value="60">60 Days</SelectItem>
-                    <SelectItem value="90">90 Days</SelectItem>
+                    <SelectItem value="0">Today ({new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})</SelectItem>
+                    <SelectItem value="1">Tomorrow ({new Date(Date.now() + 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})</SelectItem>
+                    <SelectItem value="3">In 3 days ({new Date(Date.now() + 3 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})</SelectItem>
+                    <SelectItem value="7">In 1 week ({new Date(Date.now() + 7 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})</SelectItem>
+                    <SelectItem value="14">In 2 weeks ({new Date(Date.now() + 14 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})</SelectItem>
+                    <SelectItem value="21">In 3 weeks ({new Date(Date.now() + 21 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            {/* Amount Slider for better UX */}
+            {/* Description Input - Required */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>₹0</span>
-                <span>Quick adjust amount</span>
-                <span>₹{(financialState.currentBalance * 0.5).toLocaleString()}</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max={financialState.currentBalance * 0.5}
-                step="500"
-                value={amount || 0}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
+              <label className="text-sm font-medium">Description <span className="text-red-500">*</span></label>
+              <Input
+                type="text"
+                placeholder="e.g., New laptop, Weekend trip, etc."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
               />
             </div>
 
@@ -218,7 +239,7 @@ export default function WhatIfSimulator() {
             <div className="flex items-center gap-3">
               <Button
                 onClick={handleSimulate}
-                disabled={!amount || parseFloat(amount) <= 0 || !category}
+                disabled={!amount || parseFloat(amount) <= 0 || !category || !description || description.trim() === ''}
                 className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white button-glow"
                 size="lg"
               >
@@ -403,6 +424,52 @@ export default function WhatIfSimulator() {
                 </Card>
               </motion.div>
             </div>
+
+            {/* Save Transaction Actions */}
+            {impact && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+                className="mt-6"
+              >
+                <Card className="p-6 glassmorphism border-2 border-green-500/30">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-green-500" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">Save this transaction?</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Add this expense to your transaction history
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Button
+                        onClick={handleSaveTransaction}
+                        disabled={isSaving || !amount || !category || !description || description.trim() === ''}
+                        className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
+                        size="lg"
+                      >
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        {isSaving ? 'Saving...' : 'Save Transaction'}
+                      </Button>
+                      <Button
+                        onClick={handleClear}
+                        variant="outline"
+                        size="lg"
+                        className="flex-1"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

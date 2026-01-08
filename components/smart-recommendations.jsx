@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useFinancial } from '@/lib/financialContext';
+import { toast } from 'sonner';
 import {
   Lightbulb,
   ChevronDown,
@@ -24,8 +25,9 @@ import {
 } from 'lucide-react';
 
 export default function SmartRecommendations() {
-  const { recommendations } = useFinancial();
+  const { recommendations, applyRecommendation, appliedRecommendations } = useFinancial();
   const [expandedRec, setExpandedRec] = useState(null);
+  const [applyingId, setApplyingId] = useState(null);
 
   const getPriorityIcon = (priority) => {
     switch (priority) {
@@ -264,13 +266,32 @@ export default function SmartRecommendations() {
                       {/* Action Button */}
                       <Button
                         className="w-full mt-4 bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white"
-                        onClick={() => {
-                          // In a real app, this would apply the recommendation
-                          console.log('Apply recommendation:', rec.id);
+                        onClick={async () => {
+                          if (appliedRecommendations.some(ar => ar.id === rec.id)) {
+                            alert('This recommendation has already been applied!');
+                            return;
+                          }
+                          setApplyingId(rec.id);
+                          try {
+                            await applyRecommendation(rec);
+                            toast.success(
+                              `Recommendation applied! Potential savings: ₹${Math.round(rec.impact.balanceChange || 0).toLocaleString()}/month`,
+                              { duration: 5000 }
+                            );
+                          } catch (error) {
+                            toast.error('Failed to apply recommendation. Please try again.');
+                          } finally {
+                            setApplyingId(null);
+                          }
                         }}
+                        disabled={applyingId === rec.id || appliedRecommendations.some(ar => ar.id === rec.id)}
                       >
                         <CheckCircle className="w-4 h-4 mr-2" />
-                        Apply This Recommendation
+                        {applyingId === rec.id 
+                          ? 'Applying...' 
+                          : appliedRecommendations.some(ar => ar.id === rec.id)
+                          ? 'Applied ✓'
+                          : 'Apply This Recommendation'}
                       </Button>
                     </div>
                   </motion.div>
