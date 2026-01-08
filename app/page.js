@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, 
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 export default function HomePage() {
   const [spendAmount, setSpendAmount] = useState("");
   const [showPreview, setShowPreview] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentBalance] = useState(50000);
   const [monthlyIncome] = useState(75000);
   const [monthlyExpenses] = useState(45000);
@@ -52,6 +53,23 @@ export default function HomePage() {
   };
 
   const impact = calculateImpact();
+
+  useEffect(() => {
+    let mounted = true;
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!mounted) return;
+        if (res.ok) setIsAuthenticated(true);
+        else setIsAuthenticated(false);
+      } catch (e) {
+        if (!mounted) return;
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -139,38 +157,42 @@ export default function HomePage() {
               Most apps show your balance. We show your <span className="text-foreground font-semibold">future</span>.
             </motion.p>
 
-            {/* Interactive Spend Input */}
+            {/* Interactive Spend Input (only for logged-in users) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               className="max-w-md mx-auto space-y-4 pt-8"
             >
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
-                  ₹
-                </div>
-                <Input
-                  type="number"
-                  placeholder="Enter amount you're planning to spend"
-                  value={spendAmount}
-                  onChange={(e) => setSpendAmount(e.target.value)}
-                  className="pl-8 h-14 text-lg bg-background/80 backdrop-blur-sm border-2 focus:border-teal-500 transition-colors"
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      handleSeeImpact();
-                    }
-                  }}
-                />
-              </div>
-              <Button
-                onClick={handleSeeImpact}
-                size="lg"
-                className="w-full h-14 text-lg bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 button-glow group"
-              >
-                See Impact
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              {isAuthenticated && (
+                <>
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">
+                      ₹
+                    </div>
+                    <Input
+                      type="number"
+                      placeholder="Enter amount you're planning to spend"
+                      value={spendAmount}
+                      onChange={(e) => setSpendAmount(e.target.value)}
+                      className="pl-8 h-14 text-lg bg-background/80 backdrop-blur-sm border-2 focus:border-teal-500 transition-colors"
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          handleSeeImpact();
+                        }
+                      }}
+                    />
+                  </div>
+                  <Button
+                    onClick={handleSeeImpact}
+                    size="lg"
+                    className="w-full h-14 text-lg bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 button-glow group"
+                  >
+                    See Impact
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </>
+              )}
             </motion.div>
 
             {/* Feature Pills */}
@@ -372,7 +394,7 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
-              How <span className="gradient-title">FlowCast</span> Works
+              How <span className="gradient-title">SpendAhead</span> Works
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Three simple steps to understand your financial future
@@ -385,7 +407,7 @@ export default function HomePage() {
                 step: "01",
                 title: "Track Your Spending",
                 description:
-                  "Manually add expenses or scan receipts with AI. FlowCast learns your spending patterns automatically.",
+                  "Manually add expenses or scan receipts with AI. SpendAhead learns your spending patterns automatically.",
                 icon: DollarSign,
                 gradient: "from-teal-500 to-blue-500",
               },
@@ -442,10 +464,10 @@ export default function HomePage() {
               <div className="w-8 h-8 bg-gradient-to-br from-teal-500 via-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">₹</span>
               </div>
-              <span className="text-xl font-bold gradient-title">FlowCast</span>
+              <span className="text-xl font-bold gradient-title">SpendAhead</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 FlowCast. Powered by AI. Built for your future.
+              © 2024 SpendAhead. Powered by AI. Built for your future.
             </p>
           </div>
         </div>

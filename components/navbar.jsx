@@ -44,7 +44,7 @@ export default function Navbar() {
               <span className="text-white font-bold text-lg">₹</span>
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-teal-600 to-purple-600 dark:from-teal-400 dark:to-purple-400 bg-clip-text text-transparent">
-              FlowCast
+              SpendAhead
             </span>
           </Link>
 

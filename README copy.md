@@ -1,12 +1,12 @@
-# FlowCast - AI-Powered Financial Foresight Platform 💰
+# SpendAhead - AI-Powered Financial Foresight Platform 💰
 
 **See how today's spending shapes your entire month.**
 
-FlowCast is a future-first financial intelligence platform that helps you understand not just your current balance, but what happens next. Make informed spending decisions with real-time simulations, AI-powered insights, and personalized recommendations.
+SpendAhead is a future-first financial intelligence platform that helps you understand not just your current balance, but what happens next. Make informed spending decisions with real-time simulations, AI-powered insights, and personalized recommendations.
 
 ## 🌟 Core Philosophy
 
-Most financial apps tell you what happened. **FlowCast shows you what will happen.**
+Most financial apps tell you what happened. **SpendAhead shows you what will happen.**
 
 ### Key Principles
 
@@ -411,6 +411,6 @@ This project is open source and available under the MIT License.
 
 **Made with ❤️ for better financial intelligence**
 
-**FlowCast** - Because your financial future deserves more than just a balance check.
+**SpendAhead** - Because your financial future deserves more than just a balance check.
 
 **Live Demo**: Coming soon! 🚀
