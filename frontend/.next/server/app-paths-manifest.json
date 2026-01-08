@@ -1,0 +1,10 @@
+{
+  "/planner/page": "app/planner/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/transactions/page": "app/dashboard/transactions/page.js",
+  "/dashboard/what-if/page": "app/dashboard/what-if/page.js",
+  "/dashboard/recommendations/page": "app/dashboard/recommendations/page.js",
+  "/dashboard/goals/page": "app/dashboard/goals/page.js",
+  "/dashboard/analytics/page": "app/dashboard/analytics/page.js",
+  "/dashboard/settings/page": "app/dashboard/settings/page.js"
+}
