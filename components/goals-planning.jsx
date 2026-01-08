@@ -38,7 +38,7 @@ export default function GoalsPlanning() {
     priority: 'medium',
   });
 
-  const handleAddGoal = (e) => {
+  const handleAddGoal = async (e) => {
     e.preventDefault();
     
     if (!goalForm.name || !goalForm.targetAmount || !goalForm.monthlyContribution || !goalForm.targetDate) {
@@ -46,30 +46,38 @@ export default function GoalsPlanning() {
       return;
     }
 
-    addGoal({
-      name: goalForm.name,
-      targetAmount: parseFloat(goalForm.targetAmount),
-      currentAmount: parseFloat(goalForm.currentAmount) || 0,
-      monthlyContribution: parseFloat(goalForm.monthlyContribution),
-      targetDate: goalForm.targetDate,
-      priority: goalForm.priority,
-    });
+    try {
+      await addGoal({
+        name: goalForm.name,
+        targetAmount: parseFloat(goalForm.targetAmount),
+        currentAmount: parseFloat(goalForm.currentAmount) || 0,
+        monthlyContribution: parseFloat(goalForm.monthlyContribution),
+        targetDate: goalForm.targetDate,
+        priority: goalForm.priority,
+      });
 
-    toast.success('Goal added successfully!');
-    setGoalForm({
-      name: '',
-      targetAmount: '',
-      currentAmount: '',
-      monthlyContribution: '',
-      targetDate: '',
-      priority: 'medium',
-    });
-    setShowAddGoal(false);
+      toast.success('Goal added successfully!');
+      setGoalForm({
+        name: '',
+        targetAmount: '',
+        currentAmount: '',
+        monthlyContribution: '',
+        targetDate: '',
+        priority: 'medium',
+      });
+      setShowAddGoal(false);
+    } catch (error) {
+      toast.error(error.message || 'Failed to add goal');
+    }
   };
 
-  const handleDeleteGoal = (goalId, goalName) => {
-    deleteGoal(goalId);
-    toast.success(`Deleted goal: ${goalName}`);
+  const handleDeleteGoal = async (goalId, goalName) => {
+    try {
+      await deleteGoal(goalId);
+      toast.success(`Deleted goal: ${goalName}`);
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete goal');
+    }
   };
 
   const calculateGoalProgress = (goal) => {

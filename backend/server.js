@@ -9,6 +9,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import googleAuthRoutes from './routes/googleAuthRoutes.js';
+import goalRoutes from './routes/goalRoutes.js';
 
 // Load environment variables
 dotenv.config({ path: './.env' });
@@ -70,6 +71,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', googleAuthRoutes);
 app.use('/api/expenses', expenseRoutes);
+app.use('/api/goals', goalRoutes);
 
 // 404 handler
 app.use((req, res) => {
